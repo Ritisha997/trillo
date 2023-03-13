@@ -1,6 +1,6 @@
 import { Button, Col, Form, Modal, Row } from 'antd';
 import React, { useState } from 'react'
-import CustomInput from '../../../components/Common/CustomInput'
+import CustomInput from '../../../components/CustomInput';
 import { truncateString } from "../../../utils/string";
 
 const IBCWithdraw = () => {

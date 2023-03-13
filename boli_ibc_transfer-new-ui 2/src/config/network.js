@@ -48,5 +48,11 @@ export const comdex = {
 	webSocketApiUrl: envConfig?.webSocketApiUrl,
 };
 
+export const harbor = {
+	coinDenom: "HARBOR",
+	coinMinimalDenom: "uharbor",
+	coinDecimals: 6,
+	symbol: "HARBOR",
+};
 
 export const ibcDenoms = getIbcDenomsMap() || {};

@@ -148,3 +148,30 @@ export const KeplrWallet = async (chainID = comdex?.chainId) => {
 	const accounts = await offlineSigner.getAccounts();
 	return [offlineSigner, accounts];
 };
+
+
+export const initializeIBCChain = (config, callback) => {
+	(async () => {
+		if (!window.getOfflineSignerAuto || !window.keplr) {
+			const error = "Please install keplr extension";
+
+			callback(error);
+		} else {
+			if (window.keplr.experimentalSuggestChain) {
+				try {
+					await window.keplr.experimentalSuggestChain(config);
+					const offlineSigner = await window.getOfflineSignerAuto(
+						config?.chainId
+					);
+					const accounts = await offlineSigner.getAccounts();
+					callback(null, accounts[0]);
+				} catch (error) {
+					callback(error?.message);
+				}
+			} else {
+				const versionError = "Please use the recent version of keplr extension";
+				callback(versionError);
+			}
+		}
+	})();
+};

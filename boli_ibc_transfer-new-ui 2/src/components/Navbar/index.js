@@ -2,8 +2,9 @@ import React from 'react'
 import { NavLink } from "react-router-dom";
 import './index.scss';
 import { Button, Dropdown } from 'antd';
-import ConnectModal from "../Modal";
+import { ConnectModal } from '../Modal';
 import ConnectButton from './ConnectButton';
+
 
 const Navbar = () => {
     let activeStyle = {

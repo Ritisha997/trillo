@@ -1,10 +1,15 @@
 import { combineReducers } from "redux";
 import account from "./account";
 import assets from "./assets";
+import liquidity from "./liquidity";
+import oracle from "./oracle";
 
 const app = combineReducers({
 	account,
-	assets
+	assets,
+	liquidity,
+	oracle
+
 });
 
 const root = (state, action) => {

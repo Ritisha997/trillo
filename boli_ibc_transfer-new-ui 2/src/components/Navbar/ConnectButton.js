@@ -1,5 +1,7 @@
 import React from 'react';
-import './index.scss'
+import './index.scss';
+import { decode } from 'js-base64';
+import { encode } from 'js-base64';
 import { Button, Dropdown, message } from "antd";
 import { connect, useDispatch } from "react-redux";
 import { useCallback } from 'react';
@@ -14,7 +16,8 @@ import {
 import { cmst, comdex, harbor, ibcDenoms } from "../../config/network";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
-import ConnectModal from '../Modal';
+import { ConnectModal } from '../Modal';
+import DisConnectModal from '../DisConnectModal'
 import { useState, useEffect } from 'react';
 import { chain } from 'lodash';
 
@@ -88,6 +91,7 @@ const ConnectButton = ({
 					fetchKeplrAccountName().then((name) => {
 						setAccountName(name);
 					});
+					
 					localStorage.setItem("ac", encode(account.address));
 					localStorage.setItem("loginType", "keplr");
 				});
@@ -95,8 +99,8 @@ const ConnectButton = ({
 		}, [addressFromLocal]);
 
 console.log(comdex)
-		const items = [{ label: <ConnectModal />, key: "item-1" }];
-
+		// const items = [{ label: <ConnectModal/>, key: "item-1" }];
+const WalletConnectedDropdown = <ConnectModal />;
 	return (
 		<>
 			{address ? (
@@ -105,16 +109,16 @@ console.log(comdex)
 				</div>
 			) : (
 				<div>
-					{/* <Dropdown
-						menu={{ items }}
+					<Dropdown
+						overlay={WalletConnectedDropdown}
 						placement="bottomRight"
 						trigger={["click"]}
 						overlayClassName="dropconnect-overlay"
-					> */}
-						<Button shape="round" type="primary" className='btn'>
-							Connect
+					>
+						<Button shape="round" type="primary" className="btn">
+							connect
 						</Button>
-					{/* </Dropdown> */}
+					</Dropdown>
 				</div>
 			)}
 		</>
