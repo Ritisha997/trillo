@@ -19,7 +19,7 @@ const Navbar = () => {
                 <div className="max_width">
                     <div className="navbar_container ">
                         <div className="logo_container">
-                            Logo
+                            <h3>Logo</h3>
                         </div>
                         <div className="links_container">
                             <div className="links">

@@ -53,6 +53,7 @@ dl {
   margin-top: 0;
   margin-bottom: 0;
 }
+
 ol ol,
 ul ul,
 ol ul,
@@ -214,7 +215,6 @@ ul ol {
           tr {
             border-radius: 15px;
             border: 0.5px solid $border-color-base;
-
             td {
               .ant-btn-sm {
                 padding: 0 22px;
@@ -237,6 +237,7 @@ ul ol {
               &:first-child {
                 border-radius: 15px 0 0 15px;
                 text-align: start;
+                padding: 1rem 1rem;
               }
 
               &:last-child {

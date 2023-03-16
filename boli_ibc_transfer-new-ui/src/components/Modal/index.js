@@ -46,7 +46,7 @@ export const ConnectModal = ({
 
 	return (
 		<Spin spinning={inProgress}>
-			<div className="wallet-connect-dropdown">
+			{/* <div className="wallet-connect-dropdown">
 				<div className="wallet-connect-upper">
 					<h3 className="text-center">Connect Wallet</h3>
 				</div>
@@ -57,7 +57,7 @@ export const ConnectModal = ({
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> */}
 		</Spin>
 	);
 };

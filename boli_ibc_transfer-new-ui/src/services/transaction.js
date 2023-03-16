@@ -3,6 +3,7 @@ import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests";
 import { comdex } from "../config/network";
 
 
+
 export const fetchTxHash = (hash, callback) => {
 	Tendermint34Client.connect(comdex?.rpc)
 		.then((tendermintClient) => {
@@ -20,3 +21,4 @@ export const fetchTxHash = (hash, callback) => {
 			callback(error && error.message);
 		});
 };
+

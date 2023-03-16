@@ -8,7 +8,6 @@ import { comdex, harbor } from '../../config/network';
 import AssetList from '../../config/ibc_assets.json'
 import { connect, useDispatch } from "react-redux";
 import Lodash from "lodash";
-import { fetchTxHash } from '../../services/transaction';
 import {
 	amountConversion,
 	commaSeparatorWithRounding,
@@ -16,6 +15,7 @@ import {
 } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
+
 
 
 const Asssets = ({
@@ -26,7 +26,6 @@ const Asssets = ({
 	assetMap,
 	harborPrice,
 }) => {
-	console.log(fetchTxHash());
 
      const handleBalanceRefresh = () => {
 				setLoading(true);
@@ -58,7 +57,7 @@ const Asssets = ({
 		const ibcBalance = balances?.find(
 			(item) => item.denom === token?.ibcDenomHash
 		);
-		console.log(ibcBalance);
+		// console.log(ibcBalance);
 		return {
 			chainInfo: getChainConfig(token),
 			coinMinimalDenom: token?.coinMinimalDenom,
@@ -80,8 +79,8 @@ const Asssets = ({
 			withdrawUrlOverride: token?.withdrawUrlOverride,
 		};
 	});
-	console.log(ibcBalances);
-	console.log(balances);
+	// console.log(ibcBalances);
+	// console.log(balances);
 	// let ibcBalances = AssetList?.tokens.map((token) => {
 	// 	const ibcBalance = balances.find(
 	// 		(item) => item.denom === token?.ibcDenomHash
@@ -130,7 +129,7 @@ const Asssets = ({
 		},
 		{
 			title: "IBC Deposit",
-			dataIndex: "ibcDeposit",
+			dataIndex: "ibcdeposit",
 			key: "ibcDeposit",
 			align: "center",
 			width: 150,
@@ -167,9 +166,38 @@ const Asssets = ({
 		{
 			title: "IBC Withdraw",
 			key: "ibcWithdraw",
-			dataIndex: "ibcWithdraw",
+			dataIndex: "ibcwithdraw",
 			align: "right",
 			width: 150,
+			render: (value) => {
+				if (value) {
+					return value?.withdrawUrlOverride ? (
+						<Button
+							type="primary btn-filled"
+							size="small"
+							className="external-btn"
+						>
+							<a
+								href={value?.withdrawUrlOverride}
+								target="_blank"
+								rel="noreferrer"
+							>
+								Withdraw{" "}
+								<span className="hyperlink-icon">
+									{" "}
+									<SvgIcon name="hyperlink" />
+								</span>
+							</a>
+						</Button>
+					) : (
+						<IBCWithdraw
+							chain={value}
+							balances={balances}
+							handleRefresh={handleBalanceRefresh}
+						/>
+					);
+				}
+			},
 		},
 	];
      const nativeCoin = balances.filter(
@@ -185,9 +213,9 @@ const Asssets = ({
 			const nativeCoinValue =
 				getPrice(nativeCoin?.denom) *
 				(nativeCoin?.amount ? Number(amountConversion(nativeCoin?.amount)) : 0);
-console.log(nativeCoin)
+// console.log(nativeCoin)
 
-	console.log(comdex);
+// 	console.log(comdex);
 	const currentChainData = [
 		{
 			key: comdex.chainId,
@@ -213,7 +241,6 @@ console.log(nativeCoin)
 	const tableIBCData =
 		ibcBalances &&
 		ibcBalances.map((item) => {
-            console.log(item)
 			return {
 				key: item?.coinMinimalDenom,
 				asset: (
@@ -229,19 +256,19 @@ console.log(nativeCoin)
 					</>
 				),
 				noOfTokens: item?.balance?.amount,
-				ibcDeposit: (
-					<>
-						<IBCDeposit/>
-					</>
-				),
-				ibcWithdraw: (
-					<>
-						<IBCWithdraw />
-					</>
-				),
+				// ibcDeposit: (
+				// 	<>
+				// 		<IBCDeposit item={item}/>
+				// 	</>
+				// ),
+				// ibcWithdraw: (
+				// 	<>
+				// 		<IBCWithdraw />
+				// 	</>
+				// ),
 
-				// ibcdeposit: item,
-				// ibcwithdraw: item,
+				ibcdeposit: item,
+				ibcwithdraw: item,
 			};
 		});
 

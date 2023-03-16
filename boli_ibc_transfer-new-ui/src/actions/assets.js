@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { message } from 'antd';
+
 export const setAssetList = (list) => {
 	const assetHashMap = list.reduce((map, obj) => {
 		map[obj?.denom] = obj;

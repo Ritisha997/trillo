@@ -52,11 +52,14 @@ const ConnectButton = ({
 
 		const fetchBalances = useCallback(
 			(address) => {
+				console.log("hello5");
 				queryAllBalances(address, (error, result) => {
+					console.log('hello')
 					if (error) {
+						console.log("hello1");
 						return;
 					}
-
+      console.log("hello2");
 					setAccountBalances(result.balances, result.pagination);
 					// calculateAssetBalance(result.balances);
 					// calculatePoolBalance(result.balances);
@@ -64,13 +67,14 @@ const ConnectButton = ({
 			},
 			[ setAccountBalances]
 		);
-
 		useEffect(() => {
+			console.log("hello4");
 			if (address) {
+				console.log("hello3");
 				fetchBalances(address);
 			}
 		}, [address, refreshBalance]);
-
+console.log(address)
 		useEffect(() => {
 			let addressAlreadyExist = localStorage.getItem("ac");
 			addressAlreadyExist = addressAlreadyExist
@@ -98,7 +102,7 @@ const ConnectButton = ({
 			}
 		}, [addressFromLocal]);
 
-console.log(comdex)
+// console.log(comdex)
 		// const items = [{ label: <ConnectModal/>, key: "item-1" }];
 const WalletConnectedDropdown = <ConnectModal />;
 	return (
