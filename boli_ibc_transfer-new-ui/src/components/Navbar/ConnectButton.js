@@ -9,8 +9,6 @@ import {
 	setAccountAddress,
 	setAccountBalances,
 	setAccountName,
-	setAssetBalance,
-	setPoolBalance,
 	showAccountConnectModal,
 } from "../../actions/account";
 import { cmst, comdex, harbor, ibcDenoms } from "../../config/network";
@@ -24,10 +22,6 @@ import { chain } from 'lodash';
 const ConnectButton = ({
 	setAccountAddress,
 	address,
-	setAccountBalances,
-	lang,
-	setAssetBalance,
-	setPoolBalance,
 	 refreshBalance,
 	setAccountName,
 	balances,
@@ -50,30 +44,24 @@ const ConnectButton = ({
 
 
 
-		const fetchBalances = useCallback(
-			(address) => {
-				console.log("hello5");
-				queryAllBalances(address, (error, result) => {
-					console.log('hello')
-					if (error) {
-						console.log("hello1");
-						return;
-					}
-      console.log("hello2");
-					setAccountBalances(result.balances, result.pagination);
-					// calculateAssetBalance(result.balances);
-					// calculatePoolBalance(result.balances);
-				});
-			},
-			[ setAccountBalances]
-		);
-		useEffect(() => {
-			console.log("hello4");
-			if (address) {
-				console.log("hello3");
-				fetchBalances(address);
-			}
-		}, [address, refreshBalance]);
+		// const fetchBalances = useCallback(
+		// 	(address) => {
+		// 		queryAllBalances(address, (error, result) => {
+		// 			if (error) {
+		// 				return;
+		// 			}
+		// 			setAccountBalances(result.balances, result.pagination);
+		// 			// calculateAssetBalance(result.balances);
+		// 			// calculatePoolBalance(result.balances);
+		// 		});
+		// 	},
+		// 	[ setAccountBalances]
+		// );
+		// useEffect(() => {
+		// 	if (address) {
+		// 		fetchBalances(address);
+		// 	}
+		// }, [address, refreshBalance]);
 console.log(address)
 		useEffect(() => {
 			let addressAlreadyExist = localStorage.getItem("ac");
@@ -115,6 +103,7 @@ const WalletConnectedDropdown = <ConnectModal />;
 				<div>
 					<Dropdown
 						overlay={WalletConnectedDropdown}
+						// menu={items}
 						placement="bottomRight"
 						trigger={["click"]}
 						overlayClassName="dropconnect-overlay"

@@ -4,20 +4,29 @@
     display: flex;
         justify-content: center;
         gap: $gap;
+        flex-wrap: wrap;
+        align-items: center;
 }
+
+@media (max-width: 450px){
+  
+}
+
+
 
 .airdrop-upper-card {
     border-radius: 20px;
     padding: 1.5rem;
-    background: #26235381;
+    // background: #26235381;
     box-shadow: $box-shadow-inner-light;
     height: 100%;
-    width: 60vw;
+    width: 70vw;
     margin: auto;
 
     ul{
         list-style: none;
        @include flex-content($gap-large);
+         margin-top: 2rem;
     }
       p {
           text-align: center;
@@ -38,62 +47,15 @@
        }
        .airdrop-content{
         @include flex-content($gap-small);
-        margin-top: 2rem;
+      
+        p{
+          margin-top: 1rem;
+        }
        }
 }
 .airdrop-upper-card:hover{
     cursor: pointer;
-    background: #37327981;
+    // background: #37327981;
 }
 
-    //  ul {
-    //     list-style-type: none;
-    //     padding-left: 0;
-    //     display: grid;
-    //     grid-template-columns: repeat(6, 1fr);
-    //     grid-gap: 1.5rem;
-    //     place-items: center;
-    //     li {
-    //       text-align: center;
-    //       grid-column: span 3;
-    //       .icons {
-    //         background: linear-gradient(
-    //           136.03deg,
-    //           #2c1476 20.57%,
-    //           #ce13e7 51.11%,
-    //           #665aa6 81.33%
-    //         );
-    //         padding: 1px;
-    //         width: 50px;
-    //         height: 50px;
-    //         border-radius: 50px;
-    //         display: flex;
-    //         align-items: center;
-    //         justify-content: center;
-    //         margin: auto;
-    //         .icon-inner {
-    //           background: #260c44;
-    //           padding: 7px;
-    //           width: 100%;
-    //           height: 100%;
-    //           border-radius: 100%;
-    //           display: flex;
-    //           align-items: center;
-    //           justify-content: center;
-    //           img {
-    //             width: 100%;
-    //             border-radius: 50%;
-    //           }
-    //         }
-    //       }
-    //       p {
-    //         text-align: center;
-    //         margin-bottom: 0;
-    //         font-size: $font-size-base;
-    //         margin-top: 0.3rem;
-    //       }
-    //       &:nth-last-child(n + 3) {
-    //         grid-column: span 2;
-    //       }
-    //     }
-    //  }}
+  

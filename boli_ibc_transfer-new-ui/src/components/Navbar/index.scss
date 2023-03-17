@@ -1,21 +1,92 @@
+@import '../../assets/scss/variables.scss';
+
+
+@media (max-width: 400px){
+  .navbar_main_container{
+     position: relative;
+    
+     .new{
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 100;
+     background-color: $secondary-color-light;
+     width: 100%;
+     height: 40vh;
+      top: 0;
+      left: 0;
+      .logo_container{
+        h3{
+          padding-left: 1rem;
+        }
+      }
+     }
+     .links_container{
+      z-index: 100;
+     ul{
+      display: flex;
+      flex-direction: column;
+     gap: 2rem;
+     margin-bottom: 4rem;
+     }
+     }
+  }
+}
+
+
+.navbar_container{
+  .toggle{
+    color: white;
+    visibility: hidden;
+  }
+}
+
+
+
+
+@media (max-width:400px){
+.links_container{
+ display: none;
+  }
+  .active{
+    display: block;
+  }
+  .navbar_container{
+  .toggle{
+    color: white;
+    visibility: visible;
+  }
+}
+}
+
 .navbar_main_container {
   background-color: rgba($color: #000000, $alpha: 0.6);
+   
+  
   .navbar_container {
+
     display: flex;
     width: 100%;
     justify-content: space-between;
-    // align-items: center;
+    align-items: center;
     align-content: center;
     padding: 20px 0;
     .logo_container h3{
       color: white;
     }
     .links_container {
+      .close-btn{
+        color: $white;
+        padding: 0.3rem;
+        font-size: 1.4rem;
+      }
       .links {
         ul {
           display: flex;
           column-gap: 20px;
           align-items: center;
+          margin-top: 1rem;
           li {
             list-style: none;
             a {
@@ -23,8 +94,6 @@
               color: white;
               font-weight: 600;
             }
-          }
-          .button_container {
           }
         }
       }

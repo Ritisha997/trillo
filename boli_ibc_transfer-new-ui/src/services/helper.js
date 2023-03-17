@@ -1,12 +1,8 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { comdex } from "../config/network";
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
-import { LedgerSigner } from "@cosmjs/ledger-amino";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { AminoTypes } from "@cosmjs/stargate";
-import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
+
 
 
 export const createQueryClient = (callback) => {
@@ -31,6 +27,59 @@ export const KeplrWallet = async (chainID = comdex.chainId) => {
 	const accounts = await offlineSigner.getAccounts();
 	return [offlineSigner, accounts];
 };
+
+export const signAndBroadcastMagicTransaction = (
+	transaction,
+	address,
+	currentChain,
+	callback
+) => {
+
+	return magicTransactionWithKeplr(
+		transaction,
+		address,
+		currentChain,
+		callback
+	);
+};
+
+export const magicTransactionWithKeplr = async (
+	transaction,
+	address,
+	currentChain,
+	callback
+) => {
+	const [offlineSigner, accounts] = await KeplrWallet(currentChain?.chainId);
+	if (address !== accounts[0].address) {
+		const error = "Connected account is not active in Keplr";
+		callback(error);
+		return;
+	}
+
+	SigningStargateClient.connectWithSigner(currentChain.rpc, offlineSigner, {
+		registry: myRegistry,
+		aminoTypes: aminoTypes,
+	})
+		.then((client) => {
+			client
+				.signAndBroadcast(
+					address,
+					[transaction.message],
+					transaction.fee,
+					transaction.memo
+				)
+				.then((result) => {
+					callback(null, result);
+				})
+				.catch((error) => {
+					callback(error?.message);
+				});
+		})
+		.catch((error) => {
+			callback(error && error.message);
+		});
+};
+
 
 export const aminoSignIBCTx = (config, transaction, callback) => {
 	(async () => {
