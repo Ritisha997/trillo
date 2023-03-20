@@ -14,7 +14,7 @@ const [open, setOpen] = useState(false);
         color: "#e94100"
     };
 
-    const WalletConnectedDropdown = <ConnectModal />;
+    // const WalletConnectedDropdown = <ConnectModal />;
 
     return (
 			<>
@@ -53,11 +53,11 @@ const [open, setOpen] = useState(false);
 										</li>
 										<div className="button_container">
 											<div>
-												<Dropdown
+												{/* <Dropdown
 													overlay={WalletConnectedDropdown}
 													placement="bottomRight"
 													trigger={["click"]}
-												>
+												> */}
 													<div
 														shape="round"
 														type="primary"
@@ -65,7 +65,7 @@ const [open, setOpen] = useState(false);
 													>
 														<ConnectButton />
 													</div>
-												</Dropdown>
+												{/* </Dropdown> */}
 											</div>
 										</div>
 									</ul>

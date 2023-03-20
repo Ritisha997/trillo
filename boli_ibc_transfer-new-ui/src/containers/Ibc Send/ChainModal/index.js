@@ -5,6 +5,7 @@ import { chainNetworks } from "../../../config/magixTx_chain_config";
 import { setAccountAddress, setAccountName } from "../../../actions/account";
 import { connect, useDispatch } from "react-redux";
 import Snack from '../../../components/Common/Snack';
+import { MsgSendTokens, signAndBroadcastMagicTransaction, Fee } from '../../../services/helper';
 import './index.scss'
 
 const ChainModal = ({currentChain, address}) => {
@@ -125,11 +126,15 @@ const showModal = () =>{
 										value={amount}
 										onChange={(e) => setAmount(e.target.value)}
 										type="number"
-										className="mt-2"
+										className="mt-2 input-value"
 									/>
 									<Button
 										type="primary"
 										className="btn-filled mt-2 w-100"
+										disabled={
+											// disableTxBtn ||
+											!amount || txLogin
+										}
 										onClick={() => handleClickMagicTx()}
 									>
 										Send

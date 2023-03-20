@@ -26,16 +26,14 @@ const ConnectButton = ({
 	setAccountName,
 	balances,
 }) => {
-    const dispatch = useDispatch();
      const [addressFromLocal, setAddressFromLocal] = useState();
 
 	 useEffect(() => {
 			const savedAddress = localStorage.getItem("ac");
 			const userAddress = savedAddress ? decode(savedAddress) : address;
-
+console.log(userAddress);
 			if (userAddress) {
-				setAccountAddress(userAddress);
-
+				 setAccountAddress(userAddress);
 				fetchKeplrAccountName().then((name) => {
 					setAccountName(name);
 				});

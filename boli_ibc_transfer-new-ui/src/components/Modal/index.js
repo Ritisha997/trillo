@@ -13,12 +13,11 @@ import {
 } from "../../actions/account";
 import React, { useState } from "react";
 // import variables from "../../utils/variables";
-// import ButtonSubmit from "../NavigationBar/Ledger";
+
 
 export const ConnectModal = ({
 	setAccountAddress,
 	setAccountName,
-	lang,
 	showAccountConnectModal,
 }) => {
 	const [inProgress, setInProgress] = useState(false);
@@ -62,13 +61,13 @@ export const ConnectModal = ({
 	);
 };
 
-ConnectModal.propTypes = {
-setAccountAddress: PropTypes.func.isRequired,
+// ConnectModal.propTypes = {
+// setAccountAddress: PropTypes.func.isRequired,
 // setAccountName: PropTypes.func.isRequired,
 // showAccountConnectModal: PropTypes.func.isRequired,
 // lang: PropTypes.string,
 // show: PropTypes.bool,
-};
+// };
 
 const stateToProps = (state) => {
 	return {

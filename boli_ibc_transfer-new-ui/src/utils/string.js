@@ -3,3 +3,6 @@ export const truncateString = (string, front, back) =>
     string.length - back,
     string.length
   )}`;
+
+
+  export const trimWhiteSpaces = (data) => data.split(" ").join("");

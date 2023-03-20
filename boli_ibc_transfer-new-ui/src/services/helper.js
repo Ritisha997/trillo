@@ -2,6 +2,43 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { comdex } from "../config/network";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+import { trimWhiteSpaces } from "../utils/string";
+import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
+
+
+export const MsgSendTokens = (
+	userAddress,
+	receiverAddress,
+	currentChain,
+	amount
+) => {
+	return {
+		typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+		value: MsgSend.fromPartial({
+			fromAddress: trimWhiteSpaces(userAddress),
+			toAddress: trimWhiteSpaces(receiverAddress),
+			amount: [
+				{
+					denom: currentChain?.coinMinimalDenom,
+					amount: String(amount),
+				},
+			],
+		}),
+	};
+};
+
+
+function Fee(amount, gas = 250000, network) {
+	return {
+		amount: [{ amount: String(amount), denom: network?.coinMinimalDenom }],
+		gas: String(gas),
+	};
+}
+
+
+export {
+	Fee,
+}
 
 
 
@@ -116,3 +153,5 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
 			});
 	})();
 };
+
+
