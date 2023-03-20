@@ -2,12 +2,11 @@ import "./index.scss";
 import "antd/dist/antd.css";
 import * as PropTypes from "prop-types";
 import { Spin, message } from "antd";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { encode } from "js-base64";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
-
+import { setAccountAddress } from "../../actions/account";
 import {
-	setAccountAddress,
 	setAccountName,
 	showAccountConnectModal,
 } from "../../actions/account";
@@ -20,19 +19,24 @@ export const ConnectModal = ({
 	setAccountName,
 	showAccountConnectModal,
 }) => {
+	console.log(showAccountConnectModal)
 	const [inProgress, setInProgress] = useState(false);
 	
 	const handleConnectToKeplr = () => {
 		setInProgress(true);
-
+console.log('hi')
 		initializeChain((error, account) => {
+			console.log("hi1");
 			setInProgress(false);
 			if (error) {
 				message.error(error);
 				return;
 			}
-
+			console.log("hi2");
+			console.log(setAccountAddress)
+			// localStorage.setItem("ac", encode(account.address));
 			setAccountAddress(account.address);
+			console.log("hi3");
 			fetchKeplrAccountName().then((name) => {
 				setAccountName(name);
 			});

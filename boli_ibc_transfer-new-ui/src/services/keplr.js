@@ -1,12 +1,13 @@
-import { envConfig } from "../config/envConfig";
-
 
 import {
 	AccountSetBase,
 	ChainStore,
 	getKeplrFromWindow,
 } from "@keplr-wallet/stores";
-import { cmst, comdex, harbor } from "../config/network";
+import { comdex } from "../config/network";
+
+
+export const airdropContractAddress = process.env.REACT_APP_AIRDROP_CONTRACT;
 
 const getCurrencies = (chain) => {
 	if (chain?.rpc === comdex?.rpc) {
@@ -118,7 +119,6 @@ export const initializeChain = (callback) => {
 
 export const fetchKeplrAccountName = async () => {
 	const chainStore = new ChainStore([getChainConfig()]);
-
 	const accountSetBase = new AccountSetBase(
 		{
 			// No need
@@ -148,6 +148,35 @@ export const KeplrWallet = async (chainID = comdex?.chainId) => {
 	const offlineSigner = await window.getOfflineSignerAuto(chainID);
 	const accounts = await offlineSigner.getAccounts();
 	return [offlineSigner, accounts];
+};
+
+
+export const magicInitializeChain = (networkChain, callback) => {
+	(async () => {
+		if (!window.getOfflineSignerAuto || !window.keplr) {
+			const error = "Please install keplr extension";
+			callback(error);
+		} else {
+			if (window.keplr.experimentalSuggestChain) {
+				try {
+					await window.keplr.experimentalSuggestChain(
+						getChainConfig(networkChain)
+					);
+					const offlineSigner = await window.getOfflineSignerAuto(
+						networkChain?.chainId
+					);
+					const accounts = await offlineSigner.getAccounts();
+
+					callback(null, accounts[0]);
+				} catch (error) {
+					callback(error?.message);
+				}
+			} else {
+				const versionError = "Please use the recent version of keplr extension";
+				callback(versionError);
+			}
+		}
+	})();
 };
 
 

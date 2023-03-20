@@ -6,80 +6,113 @@ import { setAccountAddress, setAccountName } from "../../../actions/account";
 import { connect, useDispatch } from "react-redux";
 import Snack from '../../../components/Common/Snack';
 import { MsgSendTokens, signAndBroadcastMagicTransaction, Fee } from '../../../services/helper';
+import { checkEligibility } from '../../../services/airdropContractRead';
+import { setuserEligibilityData } from '../../../actions/airdrop';
+import { magicInitializeChain } from '../../../services/keplr';
 import './index.scss'
 
-const ChainModal = ({currentChain, address}) => {
-    // console.log(currentChain);
-const [isModalVisible, setIsModalVisible] = useState(false);
- const [userComdexAddress, setuserComdexAddress] = useState("");
- const [userAddress, setUserAddress] = useState("");
- const [userCurrentChainAddress, setUserCurrentChainAddress] = useState("");
- const [amount, setAmount] = useState();
- const [txLogin, setTxLogin] = useState(false);
+const ChainModal = ({
+	currentChain,
+	userEligibilityData,
+	setuserEligibilityData,
+	address,
+}) => {
+	// console.log(currentChain);
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [userComdexAddress, setuserComdexAddress] = useState("");
+	const [userAddress, setUserAddress] = useState("");
+	const [userCurrentChainAddress, setUserCurrentChainAddress] = useState("");
+	const [amount, setAmount] = useState();
+	const [txLogin, setTxLogin] = useState(false);
 
-const showModal = () =>{
-    setIsModalVisible(true)
-}
+	const showModal = () => {
+		setuserEligibilityData(0);
+		if (address) {
+			magicInitializeChain(
+				chainNetworks[currentChain?.networkname],
+				(error, account) => {
+					if (error) {
+						console.log(error, "error");
+						message.error(error);
+						return;
+					}
+					setUserCurrentChainAddress(account?.address);
+				}
+			);
 
-  const handleOk = () => {
+			checkEligibility(address, currentChain?.chainId)
+				.then((res) => {
+					if (res) {
+						message.success("Magic Transaction already completed! 👍");
+						navigate(`./complete-mission/${currentChain?.chainId}`);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+
+			setIsModalVisible(true);
+		} else {
+			message.error("Please connect  wallet!");
+		}
+	};
+
+	const handleOk = () => {
 		setIsModalVisible(false);
 	};
 
 	const handleCancel = () => {
-		// setuserEligibilityData(0);
+		setuserEligibilityData(0);
 		setIsModalVisible(false);
 	};
 
+	const handleClickMagicTx = () => {
+		setTxLogin(true);
+		let msg = MsgSendTokens(
+			userCurrentChainAddress,
+			userComdexAddress,
+			chainNetworks[currentChain?.networkname],
+			Number(amount) *
+				10 ** chainNetworks[currentChain?.networkname]?.coinDecimals
+		);
+		signAndBroadcastMagicTransaction(
+			{
+				message: msg,
+				fee: Fee(0, 250000, chainNetworks[currentChain?.networkname]),
+				memo: "",
+			},
+			userCurrentChainAddress,
+			chainNetworks[currentChain?.networkname],
+			(error, result) => {
+				if (error) {
+					message.error(error);
+					setTxLogin(false);
+					return;
+				}
+				if (result && !result?.code) {
+					message.success(
+						<Snack
+							message={variables[lang].tx_success}
+							explorerUrlToTx={
+								chainNetworks[currentChain?.networkname].explorerUrlToTx
+							}
+							hash={result?.transactionHash}
+						/>
+					);
+				} else {
+					message.error(result?.rawLog || "Transaction failed");
+					console.log(result?.rawLog);
+				}
+				setTxLogin(false);
+			}
+		);
+	};
 
-     const handleClickMagicTx = () => {
-				setTxLogin(true);
-				let msg = MsgSendTokens(
-					userCurrentChainAddress,
-					userComdexAddress,
-					chainNetworks[currentChain?.networkname],
-					Number(amount) *
-						10 ** chainNetworks[currentChain?.networkname]?.coinDecimals
-				);
-				signAndBroadcastMagicTransaction(
-					{
-						message: msg,
-						fee: Fee(0, 250000, chainNetworks[currentChain?.networkname]),
-						memo: "",
-					},
-					userCurrentChainAddress,
-					chainNetworks[currentChain?.networkname],
-					(error, result) => {
-						if (error) {
-							message.error(error);
-							setTxLogin(false);
-							return;
-						}
-						if (result && !result?.code) {
-							message.success(
-								<Snack
-									message={variables[lang].tx_success}
-									explorerUrlToTx={
-										chainNetworks[currentChain?.networkname].explorerUrlToTx
-									}
-									hash={result?.transactionHash}
-								/>
-							);
-						} else {
-							message.error(result?.rawLog || "Transaction failed");
-							console.log(result?.rawLog);
-						}
-						setTxLogin(false);
-					}
-				);
-			};
+	useEffect(() => {
+		setUserAddress(userCurrentChainAddress);
+	}, [address, userCurrentChainAddress]);
 
-			useEffect(() => {
-				setUserAddress(userCurrentChainAddress);
-			}, [address, userCurrentChainAddress]);
-
-  
-
-  return (
+	return (
 		<>
 			<Button className="icons" onClick={showModal}>
 				<div className="icon-inner">
@@ -131,6 +164,7 @@ const showModal = () =>{
 									<Button
 										type="primary"
 										className="btn-filled mt-2 w-100"
+										loading={txLogin}
 										disabled={
 											// disableTxBtn ||
 											!amount || txLogin
@@ -146,17 +180,18 @@ const showModal = () =>{
 			</Modal>
 		</>
 	);
-}
+};
 
 const stateToProps = (state) => {
 	return {
 		address: state.account.address,
 		refreshBalance: state.account.refreshBalance,
-		
+		// userEligibilityData: state.airdrop.userEligibilityData,
 	};
 };
 
 const actionsToProps = {
+	setuserEligibilityData,
 	setAccountAddress,
 	setAccountName,
 };

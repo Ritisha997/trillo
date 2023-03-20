@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 const address = (state = "", action) => {
-	if (action.type === "ACCOUNT_ADDRESS_SET") {
+	if (action.type === 'ACCOUNT_ADDRESS_SET') {
 		return action.value;
 	}
 

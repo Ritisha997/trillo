@@ -5,6 +5,12 @@ export const setAccountAddress = (value) => {
 		value,
 	};
 };
+// export function setAccountAddress(value){
+// 	return {
+// 		type: "ACCOUNT_ADDRESS_SET",
+// 		value,
+// 	};
+// }
 
 export const setAccountName = (value) => {
 	return {

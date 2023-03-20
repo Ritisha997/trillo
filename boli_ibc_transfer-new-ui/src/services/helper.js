@@ -4,7 +4,12 @@ import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { trimWhiteSpaces } from "../utils/string";
 import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
+import { AminoTypes } from "@cosmjs/stargate";
+import { myRegistry } from "./registry";
+import { customAminoTypes } from "./aminoConverter";
 
+
+const aminoTypes = new AminoTypes(customAminoTypes);
 
 export const MsgSendTokens = (
 	userAddress,
@@ -86,7 +91,9 @@ export const magicTransactionWithKeplr = async (
 	currentChain,
 	callback
 ) => {
+	console.log(address)
 	const [offlineSigner, accounts] = await KeplrWallet(currentChain?.chainId);
+	console.log(accounts[0].address);
 	if (address !== accounts[0].address) {
 		const error = "Connected account is not active in Keplr";
 		callback(error);
@@ -94,7 +101,7 @@ export const magicTransactionWithKeplr = async (
 	}
 
 	SigningStargateClient.connectWithSigner(currentChain.rpc, offlineSigner, {
-		registry: myRegistry,
+		// registry: myRegistry,
 		aminoTypes: aminoTypes,
 	})
 		.then((client) => {

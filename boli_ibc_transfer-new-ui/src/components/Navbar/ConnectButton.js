@@ -28,13 +28,15 @@ const ConnectButton = ({
 }) => {
      const [addressFromLocal, setAddressFromLocal] = useState();
 
-	 useEffect(() => {
+useEffect(() => {
 			const savedAddress = localStorage.getItem("ac");
 			const userAddress = savedAddress ? decode(savedAddress) : address;
 console.log(userAddress);
 			if (userAddress) {
+				console.log(userAddress);
 				 setAccountAddress(userAddress);
 				fetchKeplrAccountName().then((name) => {
+					console.log(name)
 					setAccountName(name);
 				});
 			}
@@ -78,6 +80,7 @@ console.log(address)
 						return;
 					}
 					setAccountAddress(account.address);
+					console.log('jhi')
 					fetchKeplrAccountName().then((name) => {
 						setAccountName(name);
 					});
@@ -90,7 +93,12 @@ console.log(address)
 
 // console.log(comdex)
 		// const items = [{ label: <ConnectModal/>, key: "item-1" }];
-const WalletConnectedDropdown = <ConnectModal />;
+const WalletConnectedDropdown = (
+	<ConnectModal
+		setAccountAddress={setAccountAddress}
+		showAccountConnectModal={showAccountConnectModal} setAccountName={setAccountName}
+	/>
+);
 	return (
 		<>
 			{address ? (
